@@ -25,7 +25,6 @@ mod tests {
     use claim::assert_err;
     use fake::faker::internet::en::SafeEmail;
     use fake::Fake;
-    use quickcheck_macros::quickcheck;
 
     // Both `Clone` and `Debug` are required by `quickcheck`
     #[derive(Debug, Clone)]
