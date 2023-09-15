@@ -1,5 +1,5 @@
 use crate::email_client::EmailClient;
-use crate::routes::{health_check, subscribe};
+use crate::routes::{confirm, health_check, subscribe};
 
 use crate::configuration::{DatabaseSettings, Settings};
 use actix_web::dev::Server;
@@ -28,7 +28,7 @@ impl Application {
             configuration.email_client.base_url,
             sender_email,
             configuration.email_client.authorization_token,
-            std::time::Duration::from_millis(configuration.email_client.timeout_milliseconds),
+            std::time::Duration::from_millis(200),
         );
         let address = format!(
             "{}:{}",
@@ -70,6 +70,7 @@ pub fn run(
             .wrap(TracingLogger::default())
             .route("/health_check", web::get().to(health_check))
             .route("/subscriptions", web::post().to(subscribe))
+            .route("/subscriptions/confirm", web::get().to(confirm))
             .app_data(db_pool.clone())
             .app_data(email_client.clone())
     })
